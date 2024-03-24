@@ -1,11 +1,11 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<title>サイフラ202403 空間写真 for Quest/VisionPro with three.js</title>
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>空間写真 by Canon Dual Fisheye for Quest/VisionPro with three.js</title>
 <!DOCTYPE html>
 <body style="margin:0; background-color: #333;">
 <div id="container"></div>
 
 <div id="info" style="position: absolute; top: .5em; left: .5em; background-color: rgba(255, 255, 255, .8); padding: .3em;">
-<a href=https://cybervalley.jp/cyberfriday.html>サイフラ202403</a> 空間写真 for Quest/VisionPro with <a href="https://threejs.org" style="color: black !important;">three.js</a><br>
+空間写真 by Canon Dual Fisheye for Quest/VisionPro with <a href="https://threejs.org" style="color: black !important;">three.js</a><br>
 <a href=https://github.com/code4fukui/fisheyes-viewer>src on GitHub</a><br>
 </div>
 
@@ -33,7 +33,9 @@ import * as THREE from 'three';
 //import { ARButton } from 'three/addons/webxr/ARButton.js';
 import { XRButton } from './XRButton.js';
 import { createSpatial2DPhotoSBS } from "./createSpatial2DPhotoSBS.js";
+import { createSpatialPhotoSBS } from "./createSpatialPhotoSBS.js";
 import { isVisionPro } from "./isVisionPro.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 //const renderer = new THREE.WebGLRenderer();
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // alpha for AR
@@ -55,22 +57,30 @@ const offy = isVisionPro ? 1 : 0;
 
 const grp = new THREE.Group();
 
+const img = new URL(location.href).searchParams.get("url") || "test.jpg";
+console.log(img);
+
 const imgs = [
-  "test.jpg",
-  //"226A0038.JPG",
+  //"test.jpg",
+  //"photo/226A0038.JPG",
+  //"photo/226A0043.JPG",
+  img,
 ];
 
-const r = 1.1;
+const r = 0;
 const w = Math.PI * .47;
 for (let i = 0; i < imgs.length; i++) {
   const img = imgs[i];
-  const photo = createSpatial2DPhotoSBS(img, true);
+  //const photo = createSpatial2DPhotoSBS(img, true);
+  const photo = createSpatialPhotoSBS(img, true);
   const n = imgs.length - 1;
   const th = (n ? (w / n) * (i - n / 2) : 0) - Math.PI / 2;
-  console.log(th);
-	photo.position.x = Math.cos(th) * r;
-	photo.position.z = Math.sin(th) * r;
-	photo.rotation.y = Math.atan2(photo.position.x, photo.position.z) - Math.PI;
+	//photo.position.x = Math.cos(th) * r;
+	//photo.position.z = Math.sin(th) * r;
+	//photo.position.x = 0;
+  //console.log(Math.sin(th) * r)
+	photo.position.z = .5;
+  //photo.rotation.y = Math.atan2(photo.position.x, photo.position.z) - Math.PI;
   photo.position.y = offy;
   scene.add(photo);
 }
@@ -83,9 +93,13 @@ scene.add(spotLight);
 */
 
 container.appendChild(renderer.domElement);
-          
+
+const orbitControls = new OrbitControls(camera, renderer.domElement);
+orbitControls.target = new THREE.Vector3(0, 0, -1.8);
+
 function tick() {
-}
+  //orbitControls.update();
+};
 
 function onWindowResize() {
   camera.aspect = innerWidth / innerHeight;
