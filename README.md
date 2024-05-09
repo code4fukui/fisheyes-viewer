@@ -1,3 +1,3 @@
-# spatialphoto-viewer
+# fisheyes-viewer
 
-https://code4fukui.github.io/spatialphoto-viewer/
+https://code4fukui.github.io/fisheyes-viewer/
