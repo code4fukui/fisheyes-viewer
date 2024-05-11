@@ -7,20 +7,22 @@ import { createTexture } from "./createTexture.js";
 const debug = false;
 
 export const createSpatialPhotoSBS = (img, reverse = true) => {
-  const scale = debug ? 1 : 2;
+  const radius = 12;
+  //const scale = debug ? 1 : 2;
   const wireframe = debug;
 
   const texture = debug || !img ? null : createTexture(img);
   const left = reverse ? 2 : 1;
 
-  const scalex = 2.1;
-  const scaley = scale * 1.366 / 1.024;
+  const scale = radius * 2;
+  const scalex = scale * 1.1;
+  const scaley = scalex * 1.366 / 1.024;
 
   const photo = new THREE.Group();
   for (let i = 1; i <= 2; i++) {
     //const geometry = new THREE.PlaneGeometry(1.024 * scale, 1.366 * scale); // for Canon
     // radius, widthseg, heightseg, phiStart, phiLength, thetaStart, thetaLength
-    const geometry = new THREE.SphereGeometry(scale / 2, 36, 12, 0, Math.PI * 2, 0, Math.PI / 2);
+    const geometry = new THREE.SphereGeometry(radius, 72, 24, 0, Math.PI * 2, 0, Math.PI / 2);
     // adjust texture
     const uvs = geometry.attributes.uv.array;
     const pos = geometry.attributes.position.array;
@@ -56,7 +58,7 @@ export const createSpatialPhotoSBS = (img, reverse = true) => {
     plane.rotation.z = Math.PI;
     plane.position.x = 0;
     plane.position.y = 0;
-    plane.position.z = -1;
+    plane.position.z = 1;
     photo.add(plane);
   }
   photo.setTexture = (tx) => {
