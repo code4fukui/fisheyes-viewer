@@ -111,6 +111,8 @@ renderer.setAnimationLoop(() => {
 
 const imgs = {};
 
+const default_duration = 6;
+
 let idx = 0;
 const slideshow = async () => {
   const i = info[idx];
@@ -124,7 +126,7 @@ const slideshow = async () => {
   photo.setTexture(createTexture(i.file));
   idx++;
   if (idx == info.length) idx = 0;
-  const duration = i.duration ? i.duration : 5;
+  const duration = i.duration ? i.duration : default_duration;
   setTimeout(slideshow, duration * 1000);
 };
 slideshow();
