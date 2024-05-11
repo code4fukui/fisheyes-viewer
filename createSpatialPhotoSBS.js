@@ -1,15 +1,16 @@
 import * as THREE from "three";
+import { createTexture } from "./createTexture.js";
 
 // 2048x1366
 // 1024x1366
 //const debug = true;
 const debug = false;
 
-export const createSpatialPhotoSBS = (img, reverse) => {
+export const createSpatialPhotoSBS = (img, reverse = true) => {
   const scale = debug ? 1 : 2;
   const wireframe = debug;
 
-  const texture = debug ? null : new THREE.TextureLoader().load(img);
+  const texture = debug || !img ? null : createTexture(img);
   const left = reverse ? 2 : 1;
 
   const scalex = 2.1;
@@ -58,5 +59,11 @@ export const createSpatialPhotoSBS = (img, reverse) => {
     plane.position.z = -1;
     photo.add(plane);
   }
+  photo.setTexture = (tx) => {
+    photo.children[0].material.map = tx;
+    photo.children[0].material.needsUpdate = true;
+    photo.children[1].material.map = tx;
+    photo.children[1].material.needsUpdate = true;
+  };
   return photo;
 };

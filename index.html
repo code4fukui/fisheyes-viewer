@@ -32,32 +32,32 @@ import * as THREE from 'three';
 //import { VRButton } from 'three/addons/webxr/VRButton.js';
 //import { ARButton } from 'three/addons/webxr/ARButton.js';
 import { XRButton } from './XRButton.js';
-import { createSpatial2DPhotoSBS } from "./createSpatial2DPhotoSBS.js";
+//import { createSpatial2DPhotoSBS } from "./createSpatial2DPhotoSBS.js";
 import { createSpatialPhotoSBS } from "./createSpatialPhotoSBS.js";
 import { isVisionPro } from "./isVisionPro.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-//const renderer = new THREE.WebGLRenderer();
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // alpha for AR
 //renderer.setClearColor(new THREE.Color(0xFDFDFD));
-//sceneの大きさの通知
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
 
 // WebXR
 //document.body.appendChild(XRButton.createButton(renderer, { spaceType: "local-floor" }));
 document.body.appendChild(XRButton.createButton(renderer, { spaceType: "local" }));
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 100);
+const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.01, 100);
 
 camera.layers.enable(1); // render left view when no stereo available
 
-const offy = isVisionPro ? 1 : 0;
+const offy = isVisionPro() ? 1 : 0;
 
 const grp = new THREE.Group();
 
-const img = new URL(location.href).searchParams.get("url") || "test.jpg";
+//const testurl = "test.jpg";
+const testurl = "photo/226A0043.JPG";
+const img = new URL(location.href).searchParams.get("url") || testurl;
 console.log(img);
 
 const imgs = [
@@ -67,23 +67,18 @@ const imgs = [
   img,
 ];
 
-const r = 0;
-const w = Math.PI * .47;
-for (let i = 0; i < imgs.length; i++) {
-  const img = imgs[i];
-  //const photo = createSpatial2DPhotoSBS(img, true);
-  const photo = createSpatialPhotoSBS(img, true);
-  const n = imgs.length - 1;
-  const th = (n ? (w / n) * (i - n / 2) : 0) - Math.PI / 2;
-	//photo.position.x = Math.cos(th) * r;
-	//photo.position.z = Math.sin(th) * r;
-	//photo.position.x = 0;
-  //console.log(Math.sin(th) * r)
-	photo.position.z = .5;
-  //photo.rotation.y = Math.atan2(photo.position.x, photo.position.z) - Math.PI;
-  photo.position.y = offy;
-  scene.add(photo);
-}
+//const photo = createSpatial2DPhotoSBS(img, true);
+const photo = createSpatialPhotoSBS(img, true);
+const n = imgs.length - 1;
+const th = (n ? (w / n) * (i - n / 2) : 0) - Math.PI / 2;
+//photo.position.x = Math.cos(th) * r;
+//photo.position.z = Math.sin(th) * r;
+//photo.position.x = 0;
+//console.log(Math.sin(th) * r)
+photo.position.z = .5;
+//photo.rotation.y = Math.atan2(photo.position.x, photo.position.z) - Math.PI;
+photo.position.y = offy;
+scene.add(photo);
 
 /*// スポッドライト(色, 光の強さ, 距離, 照射角, ボケ具合, 減衰率)
 const spotLight = new THREE.SpotLight(0xffffff);
@@ -97,26 +92,16 @@ container.appendChild(renderer.domElement);
 const orbitControls = new OrbitControls(camera, renderer.domElement);
 orbitControls.target = new THREE.Vector3(0, 0, -1.8);
 
-function tick() {
-  //orbitControls.update();
-};
-
-function onWindowResize() {
+addEventListener("resize", () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
-}
-window.addEventListener("resize", onWindowResize);
+});
 
-function animate() {
-  renderer.setAnimationLoop(render);
-}
-
-function render() {
-  tick();
+renderer.setAnimationLoop(() => {
+  //orbitControls.update();
   renderer.render(scene, camera);
-}
-animate();
+});
 
 </script>
 </body>

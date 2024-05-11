@@ -8,4 +8,4 @@
 // Vision Pro Safari
 // Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.4 Safari/605.1.15
 const supportsWebXR = "xr" in navigator;
-export const isVisionPro = supportsWebXR && navigator.userAgent.indexOf("Macintosh") >= 0 && navigator.userAgent.indexOf("Chrome") == -1;
+export const isVisionPro = () => supportsWebXR && navigator.userAgent.indexOf("Macintosh") >= 0 && navigator.userAgent.indexOf("Chrome") == -1;
