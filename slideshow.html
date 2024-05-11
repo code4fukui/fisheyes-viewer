@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>空間写真 by Canon Dual Fisheye for Quest/VisionPro with three.js</title>
+<!DOCTYPE html>
+<body style="margin:0; background-color: #333;">
+<div id="container"></div>
+
+<div id="info" style="position: absolute; top: .5em; left: .5em; background-color: rgba(255, 255, 255, .8); padding: .3em;">
+空間写真 by Canon Dual Fisheye for Quest/VisionPro with <a href="https://threejs.org" style="color: black !important;">three.js</a><br>
+<a href=https://github.com/code4fukui/fisheyes-viewer>src on GitHub</a><br>
+</div>
+
+<style>
+body {
+  font-family: sans-serif;
+}
+a {
+  color: black !important;
+}
+</style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://code4fukui.github.io/three.js/build/three.module.js",
+    "three/addons/": "https://code4fukui.github.io/three.js/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+//import { VRButton } from 'three/addons/webxr/VRButton.js';
+//import { ARButton } from 'three/addons/webxr/ARButton.js';
+import { XRButton } from './XRButton.js';
+//import { createSpatial2DPhotoSBS } from "./createSpatial2DPhotoSBS.js";
+import { createSpatialPhotoSBS } from "./createSpatialPhotoSBS.js";
+import { isVisionPro } from "./isVisionPro.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { createTexture } from "./createTexture.js";
+import { M3U8 } from "https://code4fukui.github.io/M3U8/M3U8.js";
+import { waitImageLoad } from "https://js.sabae.cc/waitImageLoad.js";
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // alpha for AR
+//renderer.setClearColor(new THREE.Color(0xFDFDFD));
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+
+// WebXR
+//document.body.appendChild(XRButton.createButton(renderer, { spaceType: "local-floor" }));
+document.body.appendChild(XRButton.createButton(renderer, { spaceType: "local" }));
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.01, 100);
+
+camera.layers.enable(1); // render left view when no stereo available
+
+const offy = isVisionPro() ? 1 : 0;
+
+const grp = new THREE.Group();
+
+//const testurl = "test.jpg";
+//const testurl = "photo_20240509-blowinds/2024-05-09-blowinds.m3u8";
+const testurl = "https://tf0.code4fukui.org/vr180/2024-05-09-blowinds/2024-05-09-blowinds.m3u8";
+const url = new URL(location.href).searchParams.get("url") || testurl;
+//console.log(img);
+/*
+const info = [
+  { file: img, duration: 3 },
+  { file: "test.jpg", duration: 3 },
+  { file: "photo/226A0038.JPG", duration: 3 },
+  { file: "photo/226A0043.JPG", duration: 5 },
+];
+*/
+const m3u8 = await M3U8.fetch(url);
+const info = m3u8.getInfo();
+
+//const photo = createSpatial2DPhotoSBS(img, true);
+const photo = createSpatialPhotoSBS();
+const th = 0;
+//photo.position.x = Math.cos(th) * r;
+//photo.position.z = Math.sin(th) * r;
+//photo.position.x = 0;
+//console.log(Math.sin(th) * r)
+photo.position.z = .5;
+//photo.rotation.y = Math.atan2(photo.position.x, photo.position.z) - Math.PI;
+photo.position.y = offy;
+scene.add(photo);
+
+/*// スポッドライト(色, 光の強さ, 距離, 照射角, ボケ具合, 減衰率)
+const spotLight = new THREE.SpotLight(0xffffff);
+spotLight.position.set(1, 1, 4.5);
+spotLight.castShadow = true;
+scene.add(spotLight);
+*/
+
+container.appendChild(renderer.domElement);
+
+const orbitControls = new OrbitControls(camera, renderer.domElement);
+orbitControls.target = new THREE.Vector3(0, 0, -1.8);
+
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+renderer.setAnimationLoop(() => {
+  //orbitControls.update();
+  renderer.render(scene, camera);
+});
+
+const imgs = {};
+
+let idx = 0;
+const slideshow = async () => {
+  const i = info[idx];
+  if (!imgs[i.file]) {
+    const img = new Image();
+    img.src = i.file;
+    imgs[i.file] = img;
+    await waitImageLoad(img);
+    console.log("loaded", i.file);
+  }
+  photo.setTexture(createTexture(i.file));
+  idx++;
+  if (idx == info.length) idx = 0;
+  const duration = i.duration ? i.duration : 5;
+  setTimeout(slideshow, duration * 1000);
+};
+slideshow();
+
+</script>
+</body>
+
+</html>
+
