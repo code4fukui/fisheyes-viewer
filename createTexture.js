@@ -3,6 +3,7 @@ import { isVisionPro } from "./isVisionPro.js";
 import { setVideoSrc } from "https://code4fukui.github.io/hls-movie-player-with-cache/setVideoSrc.js";
 
 export const isVideo = (url) => {
+  if (!url) return false;
   const path = url.toLowerCase();
   return path.endsWith(".mp4") || path.endsWith(".m3u8");
 };
