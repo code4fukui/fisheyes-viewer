@@ -43,6 +43,8 @@ const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // a
 renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(devicePixelRatio);
 
+//renderer.outputEncoding = THREE.sRGBEncoding;
+
 // WebXR
 //document.body.appendChild(XRButton.createButton(renderer, { spaceType: "local-floor" }));
 document.body.appendChild(XRButton.createButton(renderer, { spaceType: "local" }));
@@ -61,23 +63,9 @@ const testurl = "photo/226A0043.JPG";
 const img = new URL(location.href).searchParams.get("url") || testurl;
 console.log(img);
 
-const imgs = [
-  //"test.jpg",
-  //"photo/226A0038.JPG",
-  //"photo/226A0043.JPG",
-  img,
-];
-
 //const photo = createSpatial2DPhotoSBS(img, true);
 const photo = createSpatialPhotoSBS(img, true);
-const n = imgs.length - 1;
-const th = (n ? (w / n) * (i - n / 2) : 0) - Math.PI / 2;
-//photo.position.x = Math.cos(th) * r;
-//photo.position.z = Math.sin(th) * r;
-//photo.position.x = 0;
-//console.log(Math.sin(th) * r)
 photo.position.z = .5;
-//photo.rotation.y = Math.atan2(photo.position.x, photo.position.z) - Math.PI;
 photo.position.y = offy;
 scene.add(photo);
 
