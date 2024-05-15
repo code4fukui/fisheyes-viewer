@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { createTexture } from "./createTexture.js";
+import { createTexture, isVideo } from "./createTexture.js";
 
 // 2048x1366
 // 1024x1366
@@ -16,7 +16,8 @@ export const createSpatialPhotoSBS = (img, reverse = true) => {
 
   const scale = radius * 2;
   const scalex = scale * 1.1;
-  const scaley = scalex * 1.366 / 1.024;
+  const aspectratio = isVideo(img) ? (8192 / 2) / 4320 : 1.366 / 1.024;
+  const scaley = scalex * aspectratio;
 
   const photo = new THREE.Group();
   for (let i = 1; i <= 2; i++) {
