@@ -92,6 +92,13 @@ renderer.setAnimationLoop(() => {
   renderer.render(scene, camera);
 });
 
+// use cache
+try {
+  navigator.serviceWorker.register("./cache-service-worker.js");
+  console.log("serviceWorker ok!");
+} catch (e) {
+  console.log("serviceWorker err", e);
+}
 </script>
 </body>
 
