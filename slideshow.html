@@ -60,7 +60,7 @@ const grp = new THREE.Group();
 
 //const testurl = "test.jpg";
 //const testurl = "photo_20240509-blowinds/2024-05-09-blowinds.m3u8";
-const testurl = "https://tf0.code4fukui.org/vr180/2024-05-09-blowinds/2024-05-09-blowinds.m3u8";
+const testurl = "https://img.fukuno.com/vr180/20250916_nict-expo/out.m3u8";
 const url = new URL(location.href).searchParams.get("url") || testurl;
 //console.log(img);
 /*
@@ -85,6 +85,13 @@ photo.position.z = .5;
 //photo.rotation.y = Math.atan2(photo.position.x, photo.position.z) - Math.PI;
 photo.position.y = offy;
 scene.add(photo);
+
+// 裏側も
+const photo2 = createSpatialPhotoSBS();
+photo2.position.z = 2.5;
+photo2.position.y = offy;
+photo2.rotation.y = Math.PI;
+scene.add(photo2);
 
 /*// スポッドライト(色, 光の強さ, 距離, 照射角, ボケ具合, 減衰率)
 const spotLight = new THREE.SpotLight(0xffffff);
@@ -123,7 +130,9 @@ const slideshow = async () => {
     await waitImageLoad(img);
     console.log("loaded", i.file);
   }
-  photo.setTexture(createTexture(i.file));
+  const tex = createTexture(i.file);
+  photo.setTexture(tex);
+  photo2.setTexture(tex);
   idx++;
   if (idx == info.length) idx = 0;
   const duration = i.duration ? i.duration : default_duration;
