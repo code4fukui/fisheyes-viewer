@@ -14,6 +14,7 @@ class XRButton {
       showStartXR(false);
     }
 		function showStartXR(isImmersive) {
+			let currentSession = null;
 
 			if ( sessionInit.domOverlay === undefined ) {
 
@@ -53,7 +54,6 @@ class XRButton {
 
 			//
 
-			let currentSession = null;
 
 			async function onSessionStarted( session ) {
 
