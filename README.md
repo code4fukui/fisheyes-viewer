@@ -1,5 +1,7 @@
 # fisheyes-viewer
 
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+
 Viewer for spatial photos and videos captured with Canon Dual Fisheye cameras, for use on VR/AR headsets like Quest and Vision Pro.
 
 ## Demo

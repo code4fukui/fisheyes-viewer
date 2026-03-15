@@ -1,6 +1,6 @@
 # fisheyes-viewer
 
-Canon Dual Fisheye カメラで撮影した空間写真を表示するツールです。VR/AR 対応のWebアプリケーションです。
+Canon Dual Fisheye カメラで撮影した空間写真を表示するWebアプリケーションです。VR/ARデバイスでの視聴に対応しています。
 
 ## デモ
 
