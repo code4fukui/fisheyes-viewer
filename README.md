@@ -38,7 +38,7 @@ https://code4fukui.github.io/fisheyes-viewer/?url=https://example.com/path/to/yo
 
 ### Creating a Slideshow
 
-1.  Use the `slideshow` page: `https://code4fukui.github.io/fisheyes-viewer/slideshow`
+1.  Use the `slideshow` page: `https://github.com/code4fukui/fisheyes-viewer
 2.  Create a `.m3u8` playlist file. This is a simple text file listing your image URLs and their display duration in seconds.
 
     **`playlist.m3u8` format:**

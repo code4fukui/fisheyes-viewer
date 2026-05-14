@@ -36,7 +36,7 @@ https://code4fukui.github.io/fisheyes-viewer/?url=https://example.com/path/to/yo
 
 ### スライドショーの作成
 
-1.  `slideshow` ページを使用します: `https://code4fukui.github.io/fisheyes-viewer/slideshow`
+1.  `slideshow` ページを使用します: `https://github.com/code4fukui/fisheyes-viewer
 2.  `.m3u8` プレイリストファイルを作成します。これは、画像のURLと表示時間（秒）をリストにしたシンプルなテキストファイルです。
 
     **`playlist.m3u8` のフォーマット:**
