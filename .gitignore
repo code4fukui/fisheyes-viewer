@@ -1,2 +1,7 @@
 photo/226A0038.JPG
 photo_20240509-blowinds/
+
+# auto-added by meta-ops
+node_modules/
+.DS_Store
+Thumbs.db
